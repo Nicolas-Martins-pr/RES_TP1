@@ -6,8 +6,9 @@
 #define RES_TP1_TCPCONNECTION_H
 
 
-class TCPConnection {
-
+class TCPConnection  {
+private:
+public:
 };
 
 

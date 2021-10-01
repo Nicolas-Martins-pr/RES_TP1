@@ -3,3 +3,16 @@
 //
 
 #include "connection.h"
+
+/*int main :: network (){
+
+
+
+};
+*/
+void Receive(){
+
+}
+void Send(){
+
+}

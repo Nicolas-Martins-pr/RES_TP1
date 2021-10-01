@@ -7,7 +7,8 @@
 
 
 class terminal {
-
+private:
+public:
 };
 
 

@@ -6,8 +6,12 @@
 #define RES_TP1_CONNECTION_H
 
 
-class connection {
+class Connection {
 
+private:
+public:
+    void Receive();
+    void Rend();
 };
 
 
