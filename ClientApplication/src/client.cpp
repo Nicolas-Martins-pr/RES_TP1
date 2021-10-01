@@ -15,11 +15,11 @@ int main(int argc, char** argv) {
 		result = NULL,
 		* ptr = NULL,
 		hints;
+	
 	const char* sendbuf = "this is a test";
 	char recvbuf[DEFAULT_BUFLEN];
 	int iResult;
 	int recvbuflen = DEFAULT_BUFLEN;
-
 	// Validate the parameters
 	if (argc != 2) {
 		printf("usage: %s server-name\n", argv[0]);
@@ -44,6 +44,7 @@ int main(int argc, char** argv) {
 	hints.ai_protocol = IPPROTO_TCP;
 
 	// Resolve the server address and port
+	
 	iResult = getaddrinfo(argv[1], DEFAULT_PORT, &hints, &result);
 	if (iResult != 0) {
 		printf("getaddrinfo failed with error: %d\n", iResult);
@@ -85,7 +86,7 @@ int main(int argc, char** argv) {
 	puts("Connected to server.\n");
 
 	// Send an initial buffer
-	iResult = send(connectSocket, sendbuf, (int)strlen(sendbuf), 0);
+	iResult = send(connectSocket, sendbuf, (int)strlen(sendbuf)+1, 0);
 	if (iResult == SOCKET_ERROR) {
 		printf("send failed with error: %d\n", WSAGetLastError());
 		closesocket(connectSocket);
@@ -96,20 +97,25 @@ int main(int argc, char** argv) {
 	printf("Bytes Sent: %ld\n", iResult);
 
 	// shutdown the connection since no more data will be sent
-	iResult = shutdown(connectSocket, SD_SEND);
+	/*iResult = shutdown(connectSocket, SD_SEND);
 	if (iResult == SOCKET_ERROR) {
 		printf("shutdown failed with error: %d\n", WSAGetLastError());
 		closesocket(connectSocket);
 		WSACleanup();
 		return 1;
 	}
-
+	*/
 	// Receive until the peer closes the connection
 	do {
 
 		iResult = recv(connectSocket, recvbuf, recvbuflen, 0);
 		if (iResult > 0)
+		{
 			printf("Bytes received: %d\n", iResult);
+			printf(recvbuf);
+			
+		}
+			
 		else if (iResult == 0)
 			printf("Connection closed\n");
 		else
@@ -160,5 +166,4 @@ int main(int argc, char** argv) {
 	
 
 	return 0;
-}
-*/
+}*/

@@ -106,7 +106,7 @@ int main() {
 		iResult = recv(clientSocket, recvbuf, recvbuflen, 0);
 		if (iResult > 0) {
 			printf("Bytes received: %d\n", iResult);
-
+			printf(recvbuf);
 			// Echo the buffer back to the sender
 			iSendResult = send(clientSocket, recvbuf, iResult, 0);
 			if (iSendResult == SOCKET_ERROR) {
@@ -115,7 +115,7 @@ int main() {
 				WSACleanup();
 				return 1;
 			}
-			printf("Bytes sent: %d\n", iSendResult);
+			printf("\n Bytes sent: %d\n", iSendResult);
 		}
 		else if (iResult == 0)
 			printf("Connection closing...\n");
