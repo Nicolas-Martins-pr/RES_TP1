@@ -4,27 +4,16 @@
 
 #include "terminal.h"
 
-terminal::terminal() {
+terminal::terminal(SOCKET listenSocket) 
+{
 
 	// Accept a client socket
-	clientSocket = accept(listenSocket, NULL, NULL);
-	if (clientSocket == INVALID_SOCKET) {
+	clientSocketTCP = accept(listenSocket, NULL, NULL);
+	if (clientSocketTCP == INVALID_SOCKET) {
 		printf("accept failed with error: %d\n", WSAGetLastError());
 		closesocket(listenSocket);
 		WSACleanup();
-		return 1;
 	}
 
-	closesocket(listenSocket);
-
-
 }
 
-/*int main :: network(){
-
-}*/
-
-terminal::terminal()
-{
-
-}

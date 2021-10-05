@@ -11,10 +11,8 @@
 
 #include "network.h"
 
-//Contient le socket d'�coute pour accepter les clients
-class terminal  : public network {
-
-class terminal : public network {
+//Contient le socket d'écoute pour accepter les clients
+class terminal {
 private:
 	SOCKET clientSocket = INVALID_SOCKET;
 public:

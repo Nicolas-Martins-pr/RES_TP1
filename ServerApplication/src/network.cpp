@@ -11,8 +11,6 @@ network::network(char* ipAdress, char* port)
 	int iResult;
 	//int iSendResult;
 
-	SOCKET clientSocket = INVALID_SOCKET;
-
 	struct addrinfo* resultTCP = NULL;
 	struct addrinfo* resultUDP = NULL;
 
@@ -113,7 +111,7 @@ network::network(char* ipAdress, char* port)
 
 	puts("Binded\n");
 
-
+	Listen();
 
 	/*
 
@@ -166,36 +164,27 @@ network::network(char* ipAdress, char* port)
 
 void network::Listen()
 {
-	terminal terminalTCP = terminal(listenSocketTCP);
-
 
 	//Listen to incoming connections
-	iResult = listen(listenSocket, SOMAXCONN);
+	int iResult = listen(listenSocketTCP, SOMAXCONN);
 	if (iResult == SOCKET_ERROR) {
 		printf("listen failed with error: %d\n", WSAGetLastError());
-		closesocket(listenSocket);
+		closesocket(listenSocketTCP);
 		WSACleanup();
 		//return 1;
 	}
 
-	// Accept a client socket TERMINAL
-	clientSocket = accept(listenSocket, NULL, NULL);
-	if (clientSocket == INVALID_SOCKET) {
-		printf("accept failed with error: %d\n", WSAGetLastError());
-		closesocket(listenSocket);
-		WSACleanup();
-		//return 1;
-	}
+	terminal terminalTCP = terminal(listenSocketTCP);
 
 	// No longer need server socket
-	closesocket(listenSocket);
-
+	closesocket(listenSocketTCP);
 
 }
 
+//Créée Connection pour le client + créée socket de connection au serveur
 void network::Connect()
 {
-
+	Connection connectionTCP = Connection();
 }
 
 void network::Update()

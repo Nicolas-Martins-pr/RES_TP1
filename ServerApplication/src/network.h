@@ -6,13 +6,12 @@
 #include <WS2tcpip.h>
 #include <stdio.h>
 
-
 #include "terminal.h"
+#include "connection.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 
-#define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT "27015"
+//#define DEFAULT_BUFLEN 512
 
 #ifndef RES_TP1_NETWORK_H
 #define RES_TP1_NETWORK_H
