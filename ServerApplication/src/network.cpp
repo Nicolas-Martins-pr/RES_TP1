@@ -115,29 +115,7 @@ network::network(char* ipAdress, char* port)
 
 
 
-
-
-	//Listen to incoming connections
-	iResult = listen(listenSocket, SOMAXCONN);
-	if (iResult == SOCKET_ERROR) {
-		printf("listen failed with error: %d\n", WSAGetLastError());
-		closesocket(listenSocket);
-		WSACleanup();
-		//return 1;
-	}
-
-	// Accept a client socket TERMINAL
-	clientSocket = accept(listenSocket, NULL, NULL);
-	if (clientSocket == INVALID_SOCKET) {
-		printf("accept failed with error: %d\n", WSAGetLastError());
-		closesocket(listenSocket);
-		WSACleanup();
-		//return 1;
-	}
-
-	// No longer need server socket
-	closesocket(listenSocket);
-
+	/*
 
 
 	// Receive until the peer shuts down the connection
@@ -182,10 +160,36 @@ network::network(char* ipAdress, char* port)
 	// cleanup
 	closesocket(clientSocket);
 	WSACleanup();
+
+	*/
 }
 
 void network::Listen()
 {
+	terminal terminalTCP = terminal(listenSocketTCP);
+
+
+	//Listen to incoming connections
+	iResult = listen(listenSocket, SOMAXCONN);
+	if (iResult == SOCKET_ERROR) {
+		printf("listen failed with error: %d\n", WSAGetLastError());
+		closesocket(listenSocket);
+		WSACleanup();
+		//return 1;
+	}
+
+	// Accept a client socket TERMINAL
+	clientSocket = accept(listenSocket, NULL, NULL);
+	if (clientSocket == INVALID_SOCKET) {
+		printf("accept failed with error: %d\n", WSAGetLastError());
+		closesocket(listenSocket);
+		WSACleanup();
+		//return 1;
+	}
+
+	// No longer need server socket
+	closesocket(listenSocket);
+
 
 }
 

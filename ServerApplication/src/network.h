@@ -6,6 +6,9 @@
 #include <WS2tcpip.h>
 #include <stdio.h>
 
+
+#include "terminal.h"
+
 #pragma comment(lib, "Ws2_32.lib")
 
 #define DEFAULT_BUFLEN 512
