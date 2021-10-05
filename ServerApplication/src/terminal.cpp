@@ -7,3 +7,8 @@
 /*int main :: network(){
 
 }*/
+
+terminal::terminal()
+{
+
+}

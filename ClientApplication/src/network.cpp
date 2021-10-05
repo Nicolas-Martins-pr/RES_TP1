@@ -3,3 +3,15 @@
 //
 
 #include "network.h"
+
+void network::Listen()
+{
+}
+
+void network::Connect()
+{
+}
+
+void network::Update()
+{
+}

@@ -8,6 +8,13 @@
 
 class network {
 
+public :
+	void Listen();
+	void Connect();
+	void Update();
+private :
+
+
 };
 
 

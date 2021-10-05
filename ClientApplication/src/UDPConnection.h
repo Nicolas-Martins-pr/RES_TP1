@@ -6,7 +6,9 @@
 #define RES_TP1_UDPCONNECTION_H
 
 
-class UDPConnection {
+#include "connection.h"
+
+class UDPConnection : public Connection {
 private:
 public:
 };

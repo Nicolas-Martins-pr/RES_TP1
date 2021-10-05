@@ -5,10 +5,14 @@
 #ifndef RES_TP1_TERMINAL_H
 #define RES_TP1_TERMINAL_H
 
+#include "network.h"
 
-class terminal {
-private:
+//Contient le socket d'écoute pour accepter les clients
+class terminal  : public network {
+
 public:
+	terminal();
+private:
 };
 
 

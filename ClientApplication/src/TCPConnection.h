@@ -5,8 +5,9 @@
 #ifndef RES_TP1_TCPCONNECTION_H
 #define RES_TP1_TCPCONNECTION_H
 
+#include "connection.h"
 
-class TCPConnection  {
+class TCPConnection  : public Connection {
 private:
 public:
 };

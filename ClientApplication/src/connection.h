@@ -5,8 +5,10 @@
 #ifndef RES_TP1_CONNECTION_H
 #define RES_TP1_CONNECTION_H
 
+#include "network.h"
 
-class Connection {
+//Contient 1 socket client et 1 socket server
+class Connection : public network {
 
 private:
 public:
