@@ -7,7 +7,7 @@
 
 TCPConnection::TCPConnection(SOCKET listenSocket, SOCKET connectSocket) : Connection(listenSocket, connectSocket)
 {
-	Send("Bien arrivé les frérots wesh wesh");
+	
 }
 
 void TCPConnection::Receive()
@@ -17,19 +17,18 @@ void TCPConnection::Receive()
 
 	int iResult;
 	// Receive until the peer closes the connection
-	do {
 
-		iResult = recv(getConnectSocket(), recvbuf, recvbuflen, 0);
-		if (iResult > 0)
-		{
-			printf("Bytes received : %d, message received : %s\n", iResult, recvbuf);
-		}
-		else if (iResult == 0)
-			printf("Connection closed\n");
-		else
-			printf("recv failed with error: %d\n", WSAGetLastError());
+	iResult = recv(getConnectSocket(), recvbuf, recvbuflen, 0);
+	if (iResult > 0)
+	{
+		printf("Bytes received : %d, message received : %s\n", iResult, recvbuf);
+	}
+	else if (iResult == 0)
+		printf("Connection closed\n");
+	else
+		printf("recv failed with error: %d\n", WSAGetLastError());
 
-	} while (iResult > 0);
+
 }
 
 void TCPConnection::Send(char * message)

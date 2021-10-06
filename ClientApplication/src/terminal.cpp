@@ -4,6 +4,8 @@
 
 #include "terminal.h"
 
+#include <iostream>
+
 #include "TCPConnection.h"
 
 terminal::terminal(SOCKET listenSocket)
@@ -22,6 +24,17 @@ terminal::terminal(SOCKET listenSocket)
 		{
 			//Create a connection for the client socket
 			TCPConnection connection = TCPConnection(listenSocket, clientSocket);
+
+
+			std::string messageToSend;
+			std::cout << "Entrez un message à envoyer au client : \n";
+			std::cin.get();
+			getline(std::cin, messageToSend);
+			char* messageAsChars = messageToSend.data();
+			connection.Send(messageAsChars);
+
+			//connection.Send("Bien le bonjour dans mon serveur paysans");
+			connection.Receive();
 		}
 
 	}

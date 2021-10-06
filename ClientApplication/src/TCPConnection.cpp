@@ -5,25 +5,18 @@
 #include "TCPConnection.h"
 
 #include <iostream>
-#include <string>
 
 using namespace std;
 
 TCPConnection::TCPConnection(SOCKET listenSocket, SOCKET connectSocket) : Connection(listenSocket, connectSocket)
 {
 
-	/*string messageToSend;
-	cout << "Entrez un message à envoyer au serveur : \n";
-	getline(cin,messageToSend);
-	char* messageAsChars = messageToSend.c_str();
-	Send(messageAsChars);*/
-
-	//Send("Bien arrivé les frérots wesh wesh");
 
 	while (true)
 	{
 		Receive();
-		//Callbacks OnReceived ???
+		Send("Je suis un client et je repond.");
+		//Callbacks ?
 	}
 
 }
