@@ -17,11 +17,12 @@ terminal::terminal(SOCKET listenSocket)
 		printf("accept failed with error: %d\n", WSAGetLastError());
 		closesocket(listenSocket);
 		WSACleanup();
+	} else
+	{
+		//Create a connection for the client socket
+		TCPConnection connection = TCPConnection(listenSocket, clientSocket);
 	}
 
-
-	//Create a connection for the client socket
-	TCPConnection connection = TCPConnection(listenSocket, clientSocket);
 
 }
 

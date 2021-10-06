@@ -21,11 +21,9 @@ int main() {
 	//Create new Network
 	network serverNetwork = network(protocol,ipAdress,port);
 
-
-
 	
-
-	//return 0;
+	
+	return 0;
 }
 
 //END OF SERVER

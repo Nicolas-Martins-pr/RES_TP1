@@ -16,9 +16,11 @@ terminal::terminal(SOCKET listenSocket)
 		closesocket(listenSocket);
 		WSACleanup();
 	}
-
-	//Create a connection for the client socket
-	TCPConnection connection = TCPConnection(listenSocket, clientSocket);
-
+	else
+	{
+		//Create a connection for the client socket
+		TCPConnection connection = TCPConnection(listenSocket, clientSocket);
+	}
+	
 }
 

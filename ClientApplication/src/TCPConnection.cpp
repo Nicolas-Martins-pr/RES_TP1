@@ -4,10 +4,21 @@
 
 #include "TCPConnection.h"
 
+#include <iostream>
+#include <string>
+
+using namespace std;
 
 TCPConnection::TCPConnection(SOCKET listenSocket, SOCKET connectSocket) : Connection(listenSocket, connectSocket)
 {
+
+	/*string messageToSend;
+	cout << "Entrez un message à envoyer au serveur : \n";
+	getline(cin,messageToSend);
+	char* messageAsChars = messageToSend.c_str();
+	Send(messageAsChars);*/
 	
+
 }
 
 void TCPConnection::Receive()
