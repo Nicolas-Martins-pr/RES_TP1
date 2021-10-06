@@ -141,7 +141,6 @@ void network::Listen(addrinfo* result)
 		//return 1;
 	}
 
-	freeaddrinfo(result);
 
 	puts("Binded\n");
 
@@ -162,6 +161,9 @@ void network::Listen(addrinfo* result)
 		// No longer need server socket
 		closesocket(listenSocket);
 	}
+
+
+	freeaddrinfo(result);
 
 }
 
@@ -194,8 +196,6 @@ void network::Connect(addrinfo* result)
 	}
 
 
-	freeaddrinfo(result);
-
 	if (connectSocket == INVALID_SOCKET) {
 		printf("Unable to connect to server!\n");
 		WSACleanup();
@@ -203,11 +203,14 @@ void network::Connect(addrinfo* result)
 	}
 
 	puts("Connected to server.\n");
-
+	
 	if (result->ai_protocol == IPPROTO_UDP)
 		UDPConnection connection = UDPConnection(listenSocket, connectSocket);
 	else if (result->ai_protocol == IPPROTO_TCP)
 		TCPConnection connection = TCPConnection(listenSocket, connectSocket);
+
+
+	freeaddrinfo(result);
 }
 
 void network::Update()

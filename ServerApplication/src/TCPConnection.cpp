@@ -7,7 +7,7 @@
 
 TCPConnection::TCPConnection(SOCKET listenSocket, SOCKET connectSocket) : Connection(listenSocket, connectSocket)
 {
-	//Receive();
+	Send("Bien arrivé les frérots wesh wesh");
 }
 
 void TCPConnection::Receive()

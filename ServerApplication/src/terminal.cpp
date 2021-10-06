@@ -11,16 +11,21 @@
 terminal::terminal(SOCKET listenSocket) 
 {
 
-	// Accept a client socket
-	clientSocket = accept(listenSocket, NULL, NULL);
-	if (clientSocket == INVALID_SOCKET) {
-		printf("accept failed with error: %d\n", WSAGetLastError());
-		closesocket(listenSocket);
-		WSACleanup();
-	} else
+	while (true)
 	{
-		//Create a connection for the client socket
-		TCPConnection connection = TCPConnection(listenSocket, clientSocket);
+		// Accept a client socket
+		clientSocket = accept(listenSocket, NULL, NULL);
+		if (clientSocket == INVALID_SOCKET) {
+			printf("accept failed with error: %d\n", WSAGetLastError());
+			closesocket(listenSocket);
+			WSACleanup();
+		}
+		else
+		{
+			//Create a connection for the client socket
+			TCPConnection connection = TCPConnection(listenSocket, clientSocket);
+		}
+
 	}
 
 

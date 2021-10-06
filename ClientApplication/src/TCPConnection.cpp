@@ -17,7 +17,14 @@ TCPConnection::TCPConnection(SOCKET listenSocket, SOCKET connectSocket) : Connec
 	getline(cin,messageToSend);
 	char* messageAsChars = messageToSend.c_str();
 	Send(messageAsChars);*/
-	
+
+	//Send("Bien arrivé les frérots wesh wesh");
+
+	while (true)
+	{
+		Receive();
+		//Callbacks OnReceived ???
+	}
 
 }
 
@@ -27,20 +34,19 @@ void TCPConnection::Receive()
 	int recvbuflen = DEFAULT_BUFLEN;
 
 	int iResult;
+
 	// Receive until the peer closes the connection
-	do {
+	iResult = recv(getConnectSocket(), recvbuf, recvbuflen, 0);
+	if (iResult > 0)
+	{
+		printf("Bytes received : %d, message received : %s\n", iResult, recvbuf);
+	}
+	else if (iResult == 0)
+		printf("Connection closed\n");
+	else
+		printf("recv failed with error: %d\n", WSAGetLastError());
 
-		iResult = recv(getConnectSocket(), recvbuf, recvbuflen, 0);
-		if (iResult > 0)
-		{
-			printf("Bytes received : %d, message received : %s\n", iResult, recvbuf);
-		}
-		else if (iResult == 0)
-			printf("Connection closed\n");
-		else
-			printf("recv failed with error: %d\n", WSAGetLastError());
-
-	} while (iResult > 0);
+	
 }
 
 void TCPConnection::Send(char* message)
