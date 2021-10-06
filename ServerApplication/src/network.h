@@ -17,15 +17,17 @@
 #define RES_TP1_NETWORK_H
 
 
+#include <string>
+
+
 class network {
 public:
-	network(char* ipAdress, char* port);
-	void Listen();
-	void Connect();
+	network(int protocol, std::string ipAdress, int port);
+	void Listen(addrinfo* result);
+	void Connect(addrinfo* result);
 	void Update();
 private:
-	SOCKET listenSocketUDP = INVALID_SOCKET;
-	SOCKET listenSocketTCP = INVALID_SOCKET;
+	SOCKET listenSocket = INVALID_SOCKET;
 
 };
 

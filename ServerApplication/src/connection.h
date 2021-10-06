@@ -4,28 +4,27 @@
 
 #include <winsock2.h>
 #include <WS2tcpip.h>
-#include <stdio.h>
-
+#include <cstdio>
 
 #ifndef RES_TP1_CONNECTION_H
 #define RES_TP1_CONNECTION_H
 
-#include "network.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 
-#define DEFAULT_ADDR "localhost"
+#define DEFAULT_BUFLEN 512
 
-//Contient 1 socket client et 1 socket server
 class Connection {
 
 public:
-    Connection();
+    Connection(SOCKET listenSocket, SOCKET connectSocket);
     void Receive();
     void Send();
+    SOCKET getConnectSocket() { return connectSocket;};
+    SOCKET getServerSocket() { return serverSocket;};
 
 private:
-    SOCKET clientSocket = INVALID_SOCKET;
+    SOCKET connectSocket = INVALID_SOCKET;
     SOCKET serverSocket = INVALID_SOCKET;
 };
 

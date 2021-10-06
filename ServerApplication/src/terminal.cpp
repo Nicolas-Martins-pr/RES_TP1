@@ -4,16 +4,24 @@
 
 #include "terminal.h"
 
+#include <iostream>
+
+#include "TCPConnection.h"
+
 terminal::terminal(SOCKET listenSocket) 
 {
 
 	// Accept a client socket
-	clientSocketTCP = accept(listenSocket, NULL, NULL);
-	if (clientSocketTCP == INVALID_SOCKET) {
+	clientSocket = accept(listenSocket, NULL, NULL);
+	if (clientSocket == INVALID_SOCKET) {
 		printf("accept failed with error: %d\n", WSAGetLastError());
 		closesocket(listenSocket);
 		WSACleanup();
 	}
+
+
+	//Create a connection for the client socket
+	TCPConnection connection = TCPConnection(listenSocket, clientSocket);
 
 }
 

@@ -9,8 +9,11 @@
 #include "connection.h"
 
 class UDPConnection : public Connection {
-private:
 public:
+    UDPConnection(SOCKET listenSocket, SOCKET connectSocket);
+    void Receive();
+    void Send(char* message);
+private:
 };
 
 

@@ -4,15 +4,20 @@
 
 #include "connection.h"
 
-/*int main :: network (){
 
-
-
-};
-*/
-void Receive(){
+Connection::Connection(SOCKET listenSocket, SOCKET connectSocket) : serverSocket(listenSocket), connectSocket(connectSocket)
+{
 
 }
-void Send(){
+
+
+
+void Connection::Receive()
+{
+
+}
+
+void Connection::Send()
+{
 
 }

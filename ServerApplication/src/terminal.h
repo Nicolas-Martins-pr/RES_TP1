@@ -2,8 +2,6 @@
 // Created by nicol on 01/10/2021.
 //
 
-#include <WinSock2.h>
-#include <winsock.h>
 #include <stdio.h>
 
 
@@ -18,7 +16,7 @@ class terminal {
 public:
 	terminal(SOCKET listenSocket);
 private:
-	SOCKET clientSocketTCP = INVALID_SOCKET;
+	SOCKET clientSocket = INVALID_SOCKET;
 };
 
 

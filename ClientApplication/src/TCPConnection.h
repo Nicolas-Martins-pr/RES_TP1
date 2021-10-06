@@ -7,9 +7,13 @@
 
 #include "connection.h"
 
-class TCPConnection  : public Connection {
-private:
+class TCPConnection : public Connection {
+
 public:
+	TCPConnection(SOCKET listenSocket, SOCKET connectSocket);
+	void Receive();
+	void Send(char* message);
+private:
 };
 
 

@@ -8,8 +8,12 @@
 #include "connection.h"
 
 class TCPConnection  : public Connection {
-private:
+
 public:
+	TCPConnection(SOCKET listenSocket, SOCKET connectSocket);
+	void Receive();
+	void Send(char* message);
+private:
 };
 
 

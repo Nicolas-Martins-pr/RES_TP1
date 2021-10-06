@@ -1,18 +1,31 @@
 
 #include "network.h"
+#include <iostream>
 
-
+using namespace std;
 
 int main() { 
 
+	int protocol;
+	string ipAdress;
+	int port;
+	cout << "CONFIGURATION OF THE SERVER\n";
+	cout << "Please enter the protocol you want to use, 0 for UDP, 1 for TCP : \n";
+	cin >> protocol;
+	cout << "Please enter the ip adress you want to use : \n";
+	cin >> ipAdress;
+	cout << "Please enter the port you want to use : \n";
+	cin >> port;
+	cout << "Configured ! \n";
 
 	//Create new Network
-	network serverNetwork = network("127.0.0.1","27015");
+	network serverNetwork = network(protocol,ipAdress,port);
+
 
 
 	
 
-	return 0;
+	//return 0;
 }
 
 //END OF SERVER
