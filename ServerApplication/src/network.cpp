@@ -165,6 +165,8 @@ void network::InitListen(addrinfo* result)
 
 
 	std::thread listenThread(&network::ListenUpdate, this, listenSocket);
+	if (listenThread.joinable())
+		listenThread.join();
 
 	closesocket(listenSocket);
 
@@ -235,6 +237,8 @@ void network::ListenUpdate(SOCKET socketToListen)
 			std::cout << "Création d'une nouvelle connection client avec la socket numéro " << clientSocketTCP << "\n";
 			TCPConnection connection = TCPConnection(socketToListen, clientSocketTCP);
 			std::thread listenThread(&network::ListenClient, this, connection);
+			if (listenThread.joinable())
+				listenThread.join();
 		}
 
 	}

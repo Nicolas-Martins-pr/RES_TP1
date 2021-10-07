@@ -5,6 +5,7 @@
 #include "TCPConnection.h"
 
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -62,7 +63,7 @@ void TCPConnection::Send(char* message)
 		//return 1;
 	}
 
-	printf("Bytes sent: %ld, message sent : %s\n", iResult, message);
+	printf("Bytes sent: %ld, message sent : %s, by socket %s\n", iResult, message, std::to_string(getConnectSocket()));
 }
 
 
