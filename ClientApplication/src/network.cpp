@@ -201,61 +201,49 @@ void network::Connect(addrinfo* result)
 
 	puts("Connected to server.\n");
 
-	if (result->ai_protocol == IPPROTO_UDP)
-		UDPConnection connection = UDPConnection(listenSocket, connectSocket);
-	else if (result->ai_protocol == IPPROTO_TCP)
-		TCPConnection connection = TCPConnection(listenSocket, connectSocket);
+	
 
+	if (result->ai_protocol == IPPROTO_UDP)
+	{
+		//UDP FOR LATER TODO
+		/*UDPConnection connection = UDPConnection(listenSocket, connectSocket);
+		std::thread listenThread(&network::ListenServer, this, connection);
+		if (listenThread.joinable())
+			listenThread.join();*/
+	}
+	else if (result->ai_protocol == IPPROTO_TCP)
+	{
+		TCPConnection connection = TCPConnection(listenSocket, connectSocket);
+		std::thread listenThread(&network::ListenServer, this, connection);
+		if (listenThread.joinable())
+			listenThread.join();
+	}
+
+	
+	std::thread listenInputThread(&terminal::ListenInput, terminal());
+	if (listenInputThread.joinable())
+		listenInputThread.join();
 
 
 	freeaddrinfo(result);
 }
 
+
 void network::ListenUpdate(SOCKET socketToListen)
 {
-	FD_ZERO(&socketList);
 
-	while (true)
-	{
-
-		// Accept a client socket
-		SOCKET clientSocketTCP = accept(listenSocket, NULL, NULL);
-		if (clientSocketTCP == INVALID_SOCKET) {
-			printf("accept failed with error: %d\n", WSAGetLastError());
-			closesocket(listenSocket);
-			WSACleanup();
-		}
-		else
-		{
-			FD_SET(clientSocketTCP, &socketList);
-			//Create a connection for the client socket
-			TCPConnection connection = TCPConnection(listenSocket, clientSocketTCP);
-			/*std::thread listenThread(&network::ListenClient, this, connection);
-			if (listenThread.joinable())
-				listenThread.join();*/
-		}
-
-	}
 
 }
 
 
 
-void network::ListenClient(TCPConnection connection)
+void network::ListenServer(TCPConnection connection)
 {
 
 	while (true)
 	{
 		char* message = connection.Receive();
-
-		for (int i = 0; i < socketList.fd_count; i++)
-		{
-			SOCKET socket = socketList.fd_array[i];
-			if (socket != connection.getConnectSocket())
-			{
-				connection.Send(message);
-			}
-		}
+		//leave if fail
 	}
 
 }

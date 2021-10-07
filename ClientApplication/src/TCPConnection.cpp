@@ -11,7 +11,7 @@ using namespace std;
 
 TCPConnection::TCPConnection(SOCKET listenSocket, SOCKET connectSocket) : Connection(listenSocket, connectSocket)
 {
-
+	
 	Send("WESH");
 	Receive();
 	while (true)

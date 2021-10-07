@@ -33,7 +33,6 @@ int main() {
 		istringstream stream(input);
 		stream >> port;
 	}
-
 	cout << "Configured ! \n";
 
 

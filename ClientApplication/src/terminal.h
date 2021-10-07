@@ -11,7 +11,8 @@
 
 class terminal {
 public:
-	terminal(SOCKET listenSocket);
+	terminal();
+	void ListenInput();
 private:
 	SOCKET clientSocket = INVALID_SOCKET;
 };
