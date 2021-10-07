@@ -209,20 +209,27 @@ void network::Connect(addrinfo* result)
 		/*UDPConnection connection = UDPConnection(listenSocket, connectSocket);
 		std::thread listenThread(&network::ListenServer, this, connection);
 		if (listenThread.joinable())
-			listenThread.join();*/
+			listenThread.join();
+
+		std::thread listenInputThread(&terminal::ListenInput, terminal(), connection);
+		if (listenInputThread.joinable())
+			listenInputThread.join();
+		*/
 	}
 	else if (result->ai_protocol == IPPROTO_TCP)
 	{
 		TCPConnection connection = TCPConnection(listenSocket, connectSocket);
 		std::thread listenThread(&network::ListenServer, this, connection);
+		std::thread listenInputThread(&terminal::ListenInputTCP, terminal(), connection);
+
 		if (listenThread.joinable())
 			listenThread.join();
-	}
+		if (listenInputThread.joinable())
+			listenInputThread.join();
 
-	
-	std::thread listenInputThread(&terminal::ListenInput, terminal());
-	if (listenInputThread.joinable())
-		listenInputThread.join();
+	}
+		
+
 
 
 	freeaddrinfo(result);
@@ -243,7 +250,7 @@ void network::ListenServer(TCPConnection connection)
 	while (true)
 	{
 		char* message = connection.Receive();
-		//leave if fail
+		//leave if fail TODO
 	}
 
 }

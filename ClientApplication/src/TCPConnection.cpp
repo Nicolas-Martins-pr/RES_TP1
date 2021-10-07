@@ -12,18 +12,7 @@ using namespace std;
 TCPConnection::TCPConnection(SOCKET listenSocket, SOCKET connectSocket) : Connection(listenSocket, connectSocket)
 {
 
-    cout << "Please enter your message : \n";
-    string input;
-    getline(cin, input);
-    const char* input1= input.c_str();
-	Send(const_cast<char *>(input1));
-	Receive();
-	while (true)
-	{
 
-	}
-	//Receive terminal?
-	//Callbacks ?
 
 
 }

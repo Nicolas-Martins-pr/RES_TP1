@@ -221,7 +221,6 @@ void network::ListenUpdate(SOCKET socketToListen)
 
 	while(true)
 	{
-		std::cout << "boucle listen update\n";
 
 		// Accept a client socket
 		SOCKET clientSocketTCP = accept(socketToListen, NULL, NULL);
@@ -250,7 +249,6 @@ void network::ListenClient(TCPConnection connection)
 	
 	while (true)
 	{
-		std::cout << "boucle listen Client\n";
 		char* message = "";
 
 		try {
@@ -260,7 +258,10 @@ void network::ListenClient(TCPConnection connection)
 			printf(msg);
 			break;
 		}
-		
+
+		printf(message);
+		printf("\n");
+
 		for (int i = 0 ; i < socketList.fd_count; i++)
 		{
 			SOCKET socket = socketList.fd_array[i];

@@ -1,6 +1,8 @@
 
 #include <stdio.h>
 
+#include "UDPConnection.h"
+
 
 #ifndef RES_TP1_TERMINAL_H
 #define RES_TP1_TERMINAL_H
@@ -12,7 +14,8 @@
 class terminal {
 public:
 	terminal();
-	void ListenInput();
+	void ListenInputTCP(TCPConnection connection);
+	void ListenInputUDP(UDPConnection connection);
 private:
 	SOCKET clientSocket = INVALID_SOCKET;
 };
