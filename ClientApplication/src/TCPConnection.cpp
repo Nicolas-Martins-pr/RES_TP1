@@ -11,32 +11,42 @@ using namespace std;
 TCPConnection::TCPConnection(SOCKET listenSocket, SOCKET connectSocket) : Connection(listenSocket, connectSocket)
 {
 
-
-	
-	Send("Je suis un client et je repond.");
+	Send("WESH");
+	Receive();
+	while (true)
+	{
+		
+	}
 	//Receive terminal?
 	//Callbacks ?
 	
 
 }
 
-void TCPConnection::Receive()
+char * TCPConnection::Receive()
 {
 	char recvbuf[DEFAULT_BUFLEN];
 	int recvbuflen = DEFAULT_BUFLEN;
 
 	int iResult;
 
-	// Receive until the peer closes the connection
+	// Receive
 	iResult = recv(getConnectSocket(), recvbuf, recvbuflen, 0);
 	if (iResult > 0)
 	{
 		printf("Bytes received : %d, message received : %s\n", iResult, recvbuf);
+
 	}
 	else if (iResult == 0)
 		printf("Connection closed\n");
-	else
+	else {
 		printf("recv failed with error: %d\n", WSAGetLastError());
+		closesocket(getConnectSocket());
+		WSACleanup();
+		std::getchar();
+	}
+
+	return recvbuf;
 
 	
 }

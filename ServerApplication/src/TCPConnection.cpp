@@ -27,7 +27,14 @@ char * TCPConnection::Receive()
 	else if (iResult == 0)
 		printf("Connection closed\n");
 	else
+	{
+		
 		printf("recv failed with error: %d\n", WSAGetLastError());
+		closesocket(getConnectSocket());
+		WSACleanup();
+		throw "Connection closed, recv failed !";
+	}
+
 
 	return recvbuf;
 

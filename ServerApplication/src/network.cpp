@@ -65,6 +65,8 @@ network::network(int protocol, std::string ipAdress, int port)
 
 	InitListen(result);
 	//Connect(result);
+
+	//freeaddrinfo(result);
 	
 
 	/*
@@ -125,7 +127,6 @@ void network::InitListen(addrinfo* result)
 		printf("socket failed with error: %ld\n", WSAGetLastError());
 		freeaddrinfo(result);
 		WSACleanup();
-		//return 1;
 	}
 
 
@@ -139,8 +140,8 @@ void network::InitListen(addrinfo* result)
 		freeaddrinfo(result);
 		closesocket(listenSocket);
 		WSACleanup();
-		//return 1;
 	}
+
 
 	puts("Binded\n");
 
@@ -153,25 +154,26 @@ void network::InitListen(addrinfo* result)
 			printf("listen failed with error: %d\n", WSAGetLastError());
 			closesocket(listenSocket);
 			WSACleanup();
-			//return 1;
 		}
 
 
-	} 
+	}
 
 
-	freeaddrinfo(result);
+	//TODO
+	//freeaddrinfo(result);
 
 
-	/*std::thread listenThread(&network::ListenUpdate, *this, listenSocket);
-	if (listenThread.joinable())
-		listenThread.join();
-		*/
+	std::thread listenThread(&network::ListenUpdate, this, listenSocket);
 
+	closesocket(listenSocket);
+
+		
+}
 
 	
 
-}
+
 
 //Créée Connection pour le client + créée socket de connection au serveur
 void network::Connect(addrinfo* result)
@@ -193,8 +195,6 @@ void network::Connect(addrinfo* result)
 		connectSocket = INVALID_SOCKET;
 	}
 
-	freeaddrinfo(result);
-
 	if (connectSocket == INVALID_SOCKET) {
 		printf("Unable to connect to server!\n");
 		WSACleanup();
@@ -207,6 +207,10 @@ void network::Connect(addrinfo* result)
 		UDPConnection connection = UDPConnection(listenSocket, connectSocket);
 	else if (result->ai_protocol == IPPROTO_TCP)
 		TCPConnection connection = TCPConnection(listenSocket, connectSocket);
+
+
+
+	freeaddrinfo(result);
 }
 
 void network::ListenUpdate(SOCKET socketToListen)
@@ -215,22 +219,22 @@ void network::ListenUpdate(SOCKET socketToListen)
 
 	while(true)
 	{
+		std::cout << "boucle listen update\n";
 
 		// Accept a client socket
-		SOCKET clientSocketTCP = accept(listenSocket, NULL, NULL);
+		SOCKET clientSocketTCP = accept(socketToListen, NULL, NULL);
 		if (clientSocketTCP == INVALID_SOCKET) {
 			printf("accept failed with error: %d\n", WSAGetLastError());
-			closesocket(listenSocket);
+			closesocket(socketToListen);
 			WSACleanup();
 		}
 		else
 		{
 			FD_SET(clientSocketTCP, &socketList);
 			//Create a connection for the client socket
-			TCPConnection connection = TCPConnection(listenSocket, clientSocketTCP);
-			/*std::thread listenThread(&network::ListenClient, this, connection);
-			if (listenThread.joinable())
-				listenThread.join();*/
+			std::cout << "Création d'une nouvelle connection client avec la socket numéro " << clientSocketTCP << "\n";
+			TCPConnection connection = TCPConnection(socketToListen, clientSocketTCP);
+			std::thread listenThread(&network::ListenClient, this, connection);
 		}
 
 	}
@@ -243,7 +247,16 @@ void network::ListenClient(TCPConnection connection)
 	
 	while (true)
 	{
-		char * message = connection.Receive();
+		std::cout << "boucle listen Client\n";
+		char* message = "";
+
+		try {
+			message = connection.Receive();
+		} catch (const char * msg)
+		{
+			printf(msg);
+			break;
+		}
 		
 		for (int i = 0 ; i < socketList.fd_count; i++)
 		{
