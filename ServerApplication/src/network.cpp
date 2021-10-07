@@ -237,8 +237,7 @@ void network::ListenUpdate(SOCKET socketToListen)
 			std::cout << "Création d'une nouvelle connection client avec la socket numéro " << clientSocketTCP << "\n";
 			TCPConnection connection = TCPConnection(socketToListen, clientSocketTCP);
 			std::thread listenThread(&network::ListenClient, this, connection);
-			if (listenThread.joinable())
-				listenThread.join();
+			listenThread.detach();
 		}
 
 	}
