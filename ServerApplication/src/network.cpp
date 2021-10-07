@@ -233,7 +233,7 @@ void network::ListenUpdate(SOCKET socketToListen)
 		{
 			FD_SET(clientSocketTCP, &socketList);
 			//Create a connection for the client socket
-			std::cout << "Création d'une nouvelle connection client avec la socket numéro " << clientSocketTCP << "\n";
+			std::cout << "Create a new client connection with socket " << std::to_string(clientSocketTCP).c_str() << "\n";
 			TCPConnection connection = TCPConnection(socketToListen, clientSocketTCP);
 			std::thread listenThread(&network::ListenClient, this, connection);
 			listenThread.detach();
@@ -244,7 +244,7 @@ void network::ListenUpdate(SOCKET socketToListen)
 }
 
 
-void network::ListenClient(TCPConnection connection)
+void network::ListenClient(TCPConnection clientConnection)
 {
 	
 	while (true)
@@ -252,22 +252,28 @@ void network::ListenClient(TCPConnection connection)
 		char* message = "";
 
 		try {
-			message = connection.Receive();
+			message = clientConnection.Receive();
 		} catch (const char * msg)
 		{
 			printf(msg);
 			break;
 		}
 
-		printf(message);
-		printf("\n");
-
 		for (int i = 0 ; i < socketList.fd_count; i++)
 		{
-			SOCKET socket = socketList.fd_array[i];
-			if(socket != connection.getConnectSocket())
+			if(strcmp(std::to_string(socketList.fd_array[i]).c_str(),std::to_string(clientConnection.getConnectSocket()).c_str()) != 0)
 			{
-				connection.Send(message);
+
+				int iResult = send(socketList.fd_array[i], message, (int)strlen(message) + 1, 0);
+				if (iResult == SOCKET_ERROR) {
+					printf("send failed with error: %d\n", WSAGetLastError());
+					closesocket(socketList.fd_array[i]);
+					WSACleanup();
+				}
+
+				printf("Bytes sent: %ld, message sent to client %s : %s\n", iResult, std::to_string(socketList.fd_array[i]).c_str() ,message);
+
+
 			}
 		}
 	}

@@ -28,7 +28,7 @@ char * TCPConnection::Receive()
 	iResult = recv(getConnectSocket(), recvbuf, recvbuflen, 0);
 	if (iResult > 0)
 	{
-		printf("Bytes received : %d, message received : %s\n", iResult, recvbuf);
+		printf("Bytes received : %d, message received : %s, from server\n", iResult, recvbuf);
 
 	}
 	else if (iResult == 0)
@@ -56,5 +56,5 @@ void TCPConnection::Send(char* message)
 		//return 1;
 	}
 
-	printf("Bytes sent: %ld, message sent : %s, by socket %s\n", iResult, message, to_string(getConnectSocket()).c_str());
+	printf("Bytes sent: %ld, message sent to server and other clients : %s\n", iResult, message);
 }
