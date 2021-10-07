@@ -11,16 +11,20 @@ using namespace std;
 
 TCPConnection::TCPConnection(SOCKET listenSocket, SOCKET connectSocket) : Connection(listenSocket, connectSocket)
 {
-	
-	Send("WESH");
+
+    cout << "Please enter your message : \n";
+    string input;
+    getline(cin, input);
+    const char* input1= input.c_str();
+	Send(const_cast<char *>(input1));
 	Receive();
 	while (true)
 	{
-		
+
 	}
 	//Receive terminal?
 	//Callbacks ?
-	
+
 
 }
 
@@ -49,7 +53,7 @@ char * TCPConnection::Receive()
 
 	return recvbuf;
 
-	
+
 }
 
 void TCPConnection::Send(char* message)
@@ -63,7 +67,5 @@ void TCPConnection::Send(char* message)
 		//return 1;
 	}
 
-	printf("Bytes sent: %ld, message sent : %s, by socket %s\n", iResult, message, std::to_string(getConnectSocket()));
+	printf("Bytes sent: %ld, message sent : %s, by socket %s\n", iResult, message, to_string(getConnectSocket()).c_str());
 }
-
-
