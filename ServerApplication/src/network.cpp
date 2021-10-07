@@ -4,6 +4,7 @@
 
 #include "network.h"
 #include <iostream>
+#include <thread>
 
 #include "TCPConnection.h"
 #include "UDPConnection.h"
@@ -62,7 +63,7 @@ network::network(int protocol, std::string ipAdress, int port)
 	}
 
 
-	Listen(result);
+	InitListen(result);
 	//Connect(result);
 	
 
@@ -115,7 +116,7 @@ network::network(int protocol, std::string ipAdress, int port)
 	*/
 }
 
-void network::Listen(addrinfo* result)
+void network::InitListen(addrinfo* result)
 {
 
 	//Create a SOCKET for connecting to server
@@ -126,6 +127,8 @@ void network::Listen(addrinfo* result)
 		WSACleanup();
 		//return 1;
 	}
+
+
 
 	printf("Socket created.\n");
 
@@ -153,11 +156,19 @@ void network::Listen(addrinfo* result)
 			//return 1;
 		}
 
-		terminal newTerminal = terminal(listenSocket);
 
-		// No longer need server socket
-		closesocket(listenSocket);
-	}
+	} 
+
+
+	freeaddrinfo(result);
+
+
+	/*std::thread listenThread(&network::ListenUpdate, *this, listenSocket);
+	if (listenThread.joinable())
+		listenThread.join();
+		*/
+
+
 	
 
 }
@@ -198,8 +209,52 @@ void network::Connect(addrinfo* result)
 		TCPConnection connection = TCPConnection(listenSocket, connectSocket);
 }
 
-void network::Update()
+void network::ListenUpdate(SOCKET socketToListen)
 {
+	FD_ZERO(&socketList);
+
+	while(true)
+	{
+
+		// Accept a client socket
+		SOCKET clientSocketTCP = accept(listenSocket, NULL, NULL);
+		if (clientSocketTCP == INVALID_SOCKET) {
+			printf("accept failed with error: %d\n", WSAGetLastError());
+			closesocket(listenSocket);
+			WSACleanup();
+		}
+		else
+		{
+			FD_SET(clientSocketTCP, &socketList);
+			//Create a connection for the client socket
+			TCPConnection connection = TCPConnection(listenSocket, clientSocketTCP);
+			/*std::thread listenThread(&network::ListenClient, this, connection);
+			if (listenThread.joinable())
+				listenThread.join();*/
+		}
+
+	}
 
 }
+
+
+void network::ListenClient(TCPConnection connection)
+{
+	
+	while (true)
+	{
+		char * message = connection.Receive();
+		
+		for (int i = 0 ; i < socketList.fd_count; i++)
+		{
+			SOCKET socket = socketList.fd_array[i];
+			if(socket != connection.getConnectSocket())
+			{
+				connection.Send(message);
+			}
+		}
+	}
+
+}
+
 

@@ -1,6 +1,7 @@
 
 #include "network.h"
 #include <iostream>
+#include <thread>
 
 using namespace std;
 
@@ -21,7 +22,7 @@ int main() {
 	//Create new Network
 	network serverNetwork = network(protocol,ipAdress,port);
 
-	
+
 	
 	return 0;
 }

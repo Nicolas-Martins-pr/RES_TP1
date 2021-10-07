@@ -32,8 +32,7 @@ terminal::terminal(SOCKET listenSocket)
 			getline(std::cin, messageToSend);
 			char* messageAsChars = messageToSend.data();
 			connection.Send(messageAsChars);
-
-			//connection.Send("Bien le bonjour dans mon serveur paysans");
+			
 			connection.Receive();
 		}
 

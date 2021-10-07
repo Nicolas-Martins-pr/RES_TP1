@@ -23,11 +23,14 @@
 class network {
 public:
 	network(int protocol, std::string ipAdress, int port);
-	void Listen(addrinfo* result);
+	void InitListen(addrinfo* result);
 	void Connect(addrinfo* result);
-	void Update();
+	void ListenUpdate(SOCKET socketToListen);
+	void ListenClient(TCPConnection connection);
+	SOCKET getListenSocket() { return listenSocket; };
 private:
 	SOCKET listenSocket = INVALID_SOCKET;
+	fd_set socketList;
 
 };
 

@@ -12,12 +12,11 @@ TCPConnection::TCPConnection(SOCKET listenSocket, SOCKET connectSocket) : Connec
 {
 
 
-	while (true)
-	{
-		Receive();
-		Send("Je suis un client et je repond.");
-		//Callbacks ?
-	}
+	
+	Send("Je suis un client et je repond.");
+	//Receive terminal?
+	//Callbacks ?
+	
 
 }
 

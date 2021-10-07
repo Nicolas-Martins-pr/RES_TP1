@@ -4,6 +4,8 @@
 
 #include <stdio.h>
 
+#include "TCPConnection.h"
+
 
 #ifndef RES_TP1_TERMINAL_H
 #define RES_TP1_TERMINAL_H
@@ -16,7 +18,8 @@ class terminal {
 public:
 	terminal(SOCKET listenSocket);
 private:
-	SOCKET clientSocket = INVALID_SOCKET;
+	SOCKET clientSocketUDP = INVALID_SOCKET;
+	SOCKET clientSocketTCP = INVALID_SOCKET;
 };
 
 
