@@ -48,7 +48,7 @@ network::network(int protocol, std::string ipAdress, int port)
 	Connect(result, port, (char *) ipAdressAsPCSTR);
 }
 
-//Cr��e Connection pour le client + cr��e socket de connection au serveur
+//Cree la Connection pour le client + creee la socket de connection au serveur
 void network::Connect(addrinfo* result, int port, char * adresse)
 {
 	// Create a SOCKET for connecting to server
@@ -67,13 +67,9 @@ void network::Connect(addrinfo* result, int port, char * adresse)
 	{
 
 		UDPConnection connection = UDPConnection(connectSocket, *result->ai_addr);
-		//std::thread listenThread(&network::ListenServer, this, connection);
-
 
 		std::thread listenInputThread(&terminal::ListenInputUDP, terminal(), connection, port, adresse);
-
-		/*if (listenThread.joinable())
-			listenThread.join();*/
+		
 		if (listenInputThread.joinable())
 			listenInputThread.join();
 
@@ -92,6 +88,7 @@ void network::Connect(addrinfo* result, int port, char * adresse)
 			puts("Connected to server.\n");
 		}
 
+		//Create connection and threads for listening and accepting new connections
 		TCPConnection connection = TCPConnection(listenSocket, connectSocket);
 		std::thread listenThread(&network::ListenServer, this, connection);
 		std::thread listenInputThread(&terminal::ListenInputTCP, terminal(), connection);
@@ -111,7 +108,6 @@ void network::ListenServer(TCPConnection connection)
 	while (true)
 	{
 		char* message = connection.Receive();
-		//leave if fail TODO
 	}
 
 }
