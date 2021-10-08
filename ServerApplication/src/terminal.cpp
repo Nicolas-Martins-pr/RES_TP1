@@ -14,15 +14,4 @@ terminal::terminal(SOCKET listenSocket)
 
 
 }
-/*void terminal::WriteMessage(TCPConnection connection)
-{
-	std::string messageToSend;
-	std::cout << "Entrez un message à envoyer au client : \n";
-	std::cin.get();
-	getline(std::cin, messageToSend);
-	char* messageAsChars = messageToSend.data();
 
-	connection.Send(messageAsChars);
-	
-}
-*/

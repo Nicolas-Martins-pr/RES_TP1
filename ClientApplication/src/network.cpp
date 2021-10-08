@@ -20,9 +20,6 @@ network::network(int protocol, std::string ipAdress, int port)
 
 	struct addrinfo hints;
 
-	//char recvbuf[DEFAULT_BUFLEN];
-	//int recvbuflen = DEFAULT_BUFLEN;
-
 	//Initialise Winsock
 	printf("\nInitialising Winsock...");
 
@@ -67,113 +64,9 @@ network::network(int protocol, std::string ipAdress, int port)
 	Connect(result);
 
 
-	/*
-
-
-	// Receive until the peer shuts down the connection
-	do {
-
-		iResult = recv(clientSocket, recvbuf, recvbuflen, 0);
-		if (iResult > 0) {
-			printf("Bytes received: %d\n", iResult);
-			printf(recvbuf);
-			// Echo the buffer back to the sender
-			iSendResult = send(clientSocket, recvbuf, iResult, 0);
-			if (iSendResult == SOCKET_ERROR) {
-				printf("send failed with error: %d\n", WSAGetLastError());
-				closesocket(clientSocket);
-				WSACleanup();
-				//return 1;
-			}
-			printf("\n Bytes sent: %d\n", iSendResult);
-		}
-		else if (iResult == 0)
-			printf("Connection closing...\n");
-		else {
-			printf("recv failed with error: %d\n", WSAGetLastError());
-			closesocket(clientSocket);
-			WSACleanup();
-			//return 1;
-		}
-
-	} while (iResult > 0);
-
-	// shutdown the connection since we're done
-	iResult = shutdown(clientSocket, SD_SEND);
-	if (iResult == SOCKET_ERROR) {
-		printf("shutdown failed with error: %d\n", WSAGetLastError());
-		closesocket(clientSocket);
-		WSACleanup();
-		//return 1;
-	}
-
-
-
-	// cleanup
-	closesocket(clientSocket);
-	WSACleanup();
-
-	*/
 }
 
-void network::InitListen(addrinfo* result)
-{
-
-	//Create a SOCKET for connecting to server
-	listenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
-	if (listenSocket == INVALID_SOCKET) {
-		printf("socket failed with error: %ld\n", WSAGetLastError());
-		freeaddrinfo(result);
-		WSACleanup();
-		//return 1;
-	}
-
-
-
-	printf("Socket created.\n");
-
-	//Setup the listening socket
-	int iResult = bind(listenSocket, result->ai_addr, (int)result->ai_addrlen);
-	if (iResult == SOCKET_ERROR) {
-		printf("bind failed with error: %d\n", WSAGetLastError());
-		freeaddrinfo(result);
-		closesocket(listenSocket);
-		WSACleanup();
-		//return 1;
-	}
-
-	puts("Binded\n");
-
-	if (result->ai_protocol == IPPROTO_TCP)
-	{
-		freeaddrinfo(result);
-		//intListen to incoming connections
-		iResult = listen(listenSocket, SOMAXCONN);
-		if (iResult == SOCKET_ERROR) {
-			printf("listen failed with error: %d\n", WSAGetLastError());
-			closesocket(listenSocket);
-			WSACleanup();
-			//return 1;
-		}
-
-
-	}
-
-
-	//freeaddrinfo(result);
-
-
-	/*std::thread listenThread(&network::ListenUpdate, *this, listenSocket);
-	if (listenThread.joinable())
-		listenThread.join();
-		*/
-}
-
-
-
-
-
-//Créée Connection pour le client + créée socket de connection au serveur
+//Crï¿½ï¿½e Connection pour le client + crï¿½ï¿½e socket de connection au serveur
 void network::Connect(addrinfo* result)
 {
 
@@ -228,20 +121,10 @@ void network::Connect(addrinfo* result)
 			listenInputThread.join();
 
 	}
-		
-
 
 
 	freeaddrinfo(result);
 }
-
-
-void network::ListenUpdate(SOCKET socketToListen)
-{
-
-
-}
-
 
 
 void network::ListenServer(TCPConnection connection)

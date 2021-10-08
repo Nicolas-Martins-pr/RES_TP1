@@ -64,58 +64,7 @@ network::network(int protocol, std::string ipAdress, int port)
 
 
 	InitListen(result);
-	//Connect(result);
 
-	//freeaddrinfo(result);
-	
-
-	/*
-
-
-	// Receive until the peer shuts down the connection
-	do {
-
-		iResult = recv(clientSocket, recvbuf, recvbuflen, 0);
-		if (iResult > 0) {
-			printf("Bytes received: %d\n", iResult);
-			printf(recvbuf);
-			// Echo the buffer back to the sender
-			iSendResult = send(clientSocket, recvbuf, iResult, 0);
-			if (iSendResult == SOCKET_ERROR) {
-				printf("send failed with error: %d\n", WSAGetLastError());
-				closesocket(clientSocket);
-				WSACleanup();
-				//return 1;
-			}
-			printf("\n Bytes sent: %d\n", iSendResult);
-		}
-		else if (iResult == 0)
-			printf("Connection closing...\n");
-		else {
-			printf("recv failed with error: %d\n", WSAGetLastError());
-			closesocket(clientSocket);
-			WSACleanup();
-			//return 1;
-		}
-
-	} while (iResult > 0);
-
-	// shutdown the connection since we're done
-	iResult = shutdown(clientSocket, SD_SEND);
-	if (iResult == SOCKET_ERROR) {
-		printf("shutdown failed with error: %d\n", WSAGetLastError());
-		closesocket(clientSocket);
-		WSACleanup();
-		//return 1;
-	}
-
-
-
-	// cleanup
-	closesocket(clientSocket);
-	WSACleanup();
-
-	*/
 }
 
 void network::InitListen(addrinfo* result)
@@ -173,11 +122,8 @@ void network::InitListen(addrinfo* result)
 		
 }
 
-	
 
-
-
-//Créée Connection pour le client + créée socket de connection au serveur
+//Crï¿½ï¿½e Connection pour le client + crï¿½ï¿½e socket de connection au serveur
 void network::Connect(addrinfo* result)
 {
 
