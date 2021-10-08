@@ -1,10 +1,5 @@
-//
-// Created by nicol on 01/10/2021.
-//
-
 #include <WS2tcpip.h>
 #include <stdio.h>
-
 #include "terminal.h"
 #include "connection.h"
 #include <string>
