@@ -9,7 +9,7 @@ TCPConnection::TCPConnection(SOCKET listenSocket, SOCKET connectSocket) : Connec
 
 }
 
-char * TCPConnection::Receive()
+void TCPConnection::Receive()
 {
 	char recvbuf[DEFAULT_BUFLEN];
 	int recvbuflen = DEFAULT_BUFLEN;
@@ -28,9 +28,8 @@ char * TCPConnection::Receive()
 		printf("recv failed with error: %d\n", WSAGetLastError());
 		closesocket(getConnectSocket());
 		WSACleanup();
-		std::getchar();
+		exit(1);
 	}
-	return recvbuf;
 }
 
 void TCPConnection::Send(char* message)
@@ -41,6 +40,7 @@ void TCPConnection::Send(char* message)
 		printf("send failed with error: %d\n", WSAGetLastError());
 		closesocket(getConnectSocket());
 		WSACleanup();
+		exit(1);
     }
 	printf("Bytes sent: %ld, message sent to server and other clients : %s\n", iResult, message);
 }

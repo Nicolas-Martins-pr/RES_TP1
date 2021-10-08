@@ -34,7 +34,7 @@ int main() {
 		stream >> port;
 	}
 
-	cout << "Configured ! \n";
+	cout << "Server configured ! \n";
 
 	//Create new Network
 	network serverNetwork = network(protocol,ipAdress,port);

@@ -107,7 +107,7 @@ void network::ListenServer(TCPConnection connection)
 
 	while (true)
 	{
-		char* message = connection.Receive();
+		connection.Receive();
 	}
 
 }

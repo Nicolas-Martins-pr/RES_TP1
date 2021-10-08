@@ -18,7 +18,7 @@ char * TCPConnection::Receive()
 	iResult = recv(getConnectSocket(), reinterpret_cast<char*>(recvbuf), recvbuflen, 0);
 	if (iResult > 0)
 	{
-		printf("\n\n\nBytes received : %d, message received : %s, from client %s\n", iResult, recvbuf, std::to_string(getConnectSocket()).c_str());
+		printf("\n\nBytes received : %d, message received : %s, from client %s\n", iResult, recvbuf, std::to_string(getConnectSocket()).c_str());
 	}
 	else if (iResult == 0)
 		printf("Connection closed\n");
@@ -26,13 +26,12 @@ char * TCPConnection::Receive()
 	{
 		printf("recv failed with error: %d\n", WSAGetLastError());
 		closesocket(getConnectSocket());
-		WSACleanup();
-		throw "Connection closed, recv failed !\n";
+		throw "Connection closed, recv failed ! \n";
 	}
 	return reinterpret_cast<char*>(recvbuf);
 }
 
-void TCPConnection::Send(char * message) // ,TCPConnection senderSocket)
+void TCPConnection::Send(char * message)
 {
 	// Send an initial buffer
 	int iResult = send(getConnectSocket(), message, (int)strlen(message) + 1, 0);
@@ -40,7 +39,6 @@ void TCPConnection::Send(char * message) // ,TCPConnection senderSocket)
 		printf("send failed with error: %d\n", WSAGetLastError());
 		closesocket(getConnectSocket());
 		WSACleanup();
-		//return 1;
 	}
     printf("Bytes sent: %ld, message sent to other clients : %s\n", iResult, message);
 }

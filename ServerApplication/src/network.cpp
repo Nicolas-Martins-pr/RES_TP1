@@ -146,6 +146,7 @@ void network::ListenUpdate(SOCKET socketToListen, int protocol)
 				printf("accept failed with error: %d\n", WSAGetLastError());
 				closesocket(socketToListen);
 				WSACleanup();
+				getchar();
 			}
 			else
 			{
@@ -163,9 +164,7 @@ void network::ListenUpdate(SOCKET socketToListen, int protocol)
 		UDPConnection connection = UDPConnection(socketToListen);
 		while (true)
 		{
-			std::cout << "bonjour je recois\n";
 			connection.Receive();
-			std::cout << "bonjour je recois plus\n";
 		}
 
 

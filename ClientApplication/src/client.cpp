@@ -32,7 +32,7 @@ int main() {
         stream >> port;
     }
 
-    cout << "Configured ! \n";
+    cout << "Client configured ! \n";
 
     //Create new Network
     network clientNetwork = network(protocol, ipAdress, port);

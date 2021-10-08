@@ -7,7 +7,7 @@ class TCPConnection : public Connection {
 
 public:
 	TCPConnection(SOCKET listenSocket, SOCKET connectSocket);
-	char * Receive();
+	void Receive();
 	void Send(char* message);
 private:
 };

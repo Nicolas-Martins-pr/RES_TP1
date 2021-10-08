@@ -16,7 +16,6 @@ class network {
 public:
 	network(int protocol, std::string ipAdress, int port);
 	void InitListen(addrinfo* result, int port);
-	void Connect(addrinfo* result);
 	void ListenUpdate(SOCKET socketToListen, int protocol);
 	void ListenClient(TCPConnection connection);
 	SOCKET getListenSocket() { return listenSocket; };
