@@ -1,9 +1,4 @@
-//
-// Created by nicol on 01/10/2021.
-//
-
 #include "TCPConnection.h"
-
 #include <iostream>
 #include <string>
 
@@ -12,17 +7,13 @@ using namespace std;
 TCPConnection::TCPConnection(SOCKET listenSocket, SOCKET connectSocket) : Connection(listenSocket, connectSocket)
 {
 
-
-
-
 }
 
 char * TCPConnection::Receive()
 {
 	char recvbuf[DEFAULT_BUFLEN];
 	int recvbuflen = DEFAULT_BUFLEN;
-
-	int iResult;
+    int iResult;
 
 	// Receive
 	iResult = recv(getConnectSocket(), recvbuf, recvbuflen, 0);
@@ -39,10 +30,7 @@ char * TCPConnection::Receive()
 		WSACleanup();
 		std::getchar();
 	}
-
 	return recvbuf;
-
-
 }
 
 void TCPConnection::Send(char* message)
@@ -53,8 +41,6 @@ void TCPConnection::Send(char* message)
 		printf("send failed with error: %d\n", WSAGetLastError());
 		closesocket(getConnectSocket());
 		WSACleanup();
-		//return 1;
-	}
-
+    }
 	printf("Bytes sent: %ld, message sent to server and other clients : %s\n", iResult, message);
 }

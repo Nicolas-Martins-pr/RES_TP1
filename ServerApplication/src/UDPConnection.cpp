@@ -1,9 +1,4 @@
-//
-// Created by nicol on 01/10/2021.
-//
-
 #include "UDPConnection.h"
-
 
 UDPConnection::UDPConnection(SOCKET listenSocket, SOCKET connectSocket) : Connection(listenSocket, connectSocket)
 {

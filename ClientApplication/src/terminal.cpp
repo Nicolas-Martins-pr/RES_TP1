@@ -1,7 +1,3 @@
-//
-// Created by nicol on 01/10/2021.
-//
-
 #include "terminal.h"
 
 #include <iostream>
@@ -24,7 +20,6 @@ void terminal::ListenInputTCP(TCPConnection connection)
 		const char* input1 = input.c_str();
 		connection.Send(const_cast<char*>(input1));
 	}
-	
 }
 
 void terminal::ListenInputUDP(UDPConnection connection)

@@ -33,14 +33,12 @@ int main() {
 		istringstream stream(input);
 		stream >> port;
 	}
-	cout << "Configured ! \n";
 
+	cout << "Configured ! \n";
 
 	//Create new Network
 	network serverNetwork = network(protocol,ipAdress,port);
 
-
-	
 	return 0;
 }
 

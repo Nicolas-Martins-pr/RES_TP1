@@ -1,7 +1,3 @@
-//
-// Created by nicol on 01/10/2021.
-//
-
 #include "network.h"
 #include <iostream>
 #include <thread>
@@ -14,25 +10,18 @@ network::network(int protocol, std::string ipAdress, int port)
 
 	WSADATA wsaData;
 	int iResult;
-	//int iSendResult;
-
 	struct addrinfo* result = NULL;
-
 	struct addrinfo hints;
 
 	//Initialise Winsock
 	printf("\nInitialising Winsock...");
-
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (iResult != 0)
 	{
 		printf("WSAStartup failed: %d\n", iResult);
-		//return 1;
 	}
 
 	printf("Initialised.\n");
-
-
 	ZeroMemory(&hints, sizeof(hints));
 	hints.ai_family = AF_INET;
 	hints.ai_flags = AI_PASSIVE;
@@ -47,7 +36,6 @@ network::network(int protocol, std::string ipAdress, int port)
 	}
 
 	const char* ipAdressAsPCSTR = ipAdress.c_str();
-
 	std::string portAsString = std::to_string(port);
 	char const* portAsPCSTR = portAsString.c_str();
 
@@ -56,20 +44,13 @@ network::network(int protocol, std::string ipAdress, int port)
 	if (iResult != 0) {
 		printf("getaddrinfo failed with error: %d\n", iResult);
 		WSACleanup();
-		//return 1;
 	}
-
-
-	//InitListen(result);
 	Connect(result);
-
-
 }
 
 //Cr��e Connection pour le client + cr��e socket de connection au serveur
 void network::Connect(addrinfo* result)
 {
-
 	// Create a SOCKET for connecting to server
 	SOCKET connectSocket = socket(result->ai_family, result->ai_socktype,
 		result->ai_protocol);
@@ -94,8 +75,6 @@ void network::Connect(addrinfo* result)
 
 	puts("Connected to server.\n");
 
-	
-
 	if (result->ai_protocol == IPPROTO_UDP)
 	{
 		//UDP FOR LATER TODO
@@ -119,13 +98,10 @@ void network::Connect(addrinfo* result)
 			listenThread.join();
 		if (listenInputThread.joinable())
 			listenInputThread.join();
-
 	}
-
 
 	freeaddrinfo(result);
 }
-
 
 void network::ListenServer(TCPConnection connection)
 {
