@@ -1,14 +1,9 @@
-//
-// Created by nicol on 01/10/2021.
-//
-
 #include <winsock2.h>
 #include <WS2tcpip.h>
 #include <cstdio>
 
 #ifndef RES_TP1_CONNECTION_H
 #define RES_TP1_CONNECTION_H
-
 
 #pragma comment(lib, "Ws2_32.lib")
 

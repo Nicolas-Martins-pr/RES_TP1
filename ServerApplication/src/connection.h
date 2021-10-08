@@ -9,7 +9,6 @@
 #ifndef RES_TP1_CONNECTION_H
 #define RES_TP1_CONNECTION_H
 
-
 #pragma comment(lib, "Ws2_32.lib")
 
 #define DEFAULT_BUFLEN 512
@@ -27,6 +26,5 @@ private:
     SOCKET connectSocket = INVALID_SOCKET;
     SOCKET serverSocket = INVALID_SOCKET;
 };
-
 
 #endif //RES_TP1_CONNECTION_H

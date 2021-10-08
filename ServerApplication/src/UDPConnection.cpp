@@ -1,7 +1,3 @@
-//
-// Created by nicol on 01/10/2021.
-//
-
 #include "UDPConnection.h"
 
 #include <iostream>
@@ -10,19 +6,19 @@
 
 UDPConnection::UDPConnection(SOCKET listenSocket) : Connection(listenSocket, NULL)
 {
-	
+
 }
 
 void UDPConnection::Receive()
 {
-	
+
 	sockaddr_in clientAddr;
 	int clientAddrLength = sizeof(clientAddr);
 	char recvbuf[DEFAULT_BUFLEN];
 	int recvbuflen = DEFAULT_BUFLEN;
 	int iResult;
 	iResult = recvfrom(getServerSocket(), recvbuf, recvbuflen, 0,(SOCKADDR *) &clientAddr, &clientAddrLength);
-	
+
 	if(iResult == SOCKET_ERROR)
 	{
 		printf("recvfrom failed with error %d\n", WSAGetLastError());
