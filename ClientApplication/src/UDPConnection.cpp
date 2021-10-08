@@ -4,8 +4,11 @@
 
 #include "UDPConnection.h"
 
+#include <iostream>
+#include <string>
 
-UDPConnection::UDPConnection(SOCKET listenSocket, SOCKET connectSocket) : Connection(listenSocket, connectSocket)
+
+UDPConnection::UDPConnection(SOCKET listenSocket, sockaddr ipAddr) : Connection(listenSocket, NULL), targetIP(ipAddr)
 {
 
 }
@@ -13,20 +16,43 @@ UDPConnection::UDPConnection(SOCKET listenSocket, SOCKET connectSocket) : Connec
 void UDPConnection::Receive()
 {
 	sockaddr clientAddr;
-	socklen_t clientAddrLength;
-	char* buffer = (char*)malloc(1024 * sizeof(char));
+	int clientAddrLength = sizeof(clientAddr);
+	char recvbuf[DEFAULT_BUFLEN];
+	int recvbuflen = DEFAULT_BUFLEN;
+	int iResult;
 
-	recvfrom(getServerSocket(), buffer, 1024, 0, &clientAddr, &clientAddrLength);
+	iResult = recvfrom(getServerSocket(), recvbuf, recvbuflen, 0, &clientAddr, &clientAddrLength);
 
-	printf("Message received : %s\n", buffer);
+	if (iResult == SOCKET_ERROR)
+	{
+		printf("recvfrom failed with error %d\n", WSAGetLastError());
+	}
+	else
+	{
+		printf("Message received : %s\n", recvbuf);
+	}
+
 }
 
-void UDPConnection::Send(char* message)
+void UDPConnection::Send(char* message, int port, char * adresse)
 {
-	sockaddr clientAddr;
-	socklen_t clientAddrLength;
+	int iResult;
+	sockaddr_in RecvAddr;
+	RecvAddr.sin_family = AF_INET;
+	RecvAddr.sin_port = port;
+	RecvAddr.sin_addr.s_addr = inet_addr(adresse);
 
-	sendto(getServerSocket(), message, 1024, 0, &clientAddr, clientAddrLength);
+	std::cout << port << "   " << adresse << "\n";
+	iResult = sendto(getServerSocket(), message, sizeof(message), 0, reinterpret_cast<SOCKADDR*>(&RecvAddr), sizeof(RecvAddr));
 
-	printf("Message sent : %s\n", message);
+	if (iResult == SOCKET_ERROR)
+	{
+		printf("sendto failed with error: %d\n", WSAGetLastError());
+		closesocket(getServerSocket());
+		WSACleanup();
+	} else
+	{
+		printf("Message sent : %s\n", message);
+	}
+
 }

@@ -10,7 +10,7 @@
 
 class UDPConnection : public Connection {
 public:
-	UDPConnection(SOCKET listenSocket, SOCKET connectSocket);
+	UDPConnection(SOCKET listenSocket);
     void Receive();
     void Send(char* message);
 private:

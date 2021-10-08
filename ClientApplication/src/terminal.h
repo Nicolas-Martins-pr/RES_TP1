@@ -15,7 +15,7 @@ class terminal {
 public:
 	terminal();
 	void ListenInputTCP(TCPConnection connection);
-	void ListenInputUDP(UDPConnection connection);
+	void ListenInputUDP(UDPConnection connection, int port, char* adresse);
 private:
 	SOCKET clientSocket = INVALID_SOCKET;
 };

@@ -63,7 +63,7 @@ network::network(int protocol, std::string ipAdress, int port)
 	}
 
 
-	InitListen(result);
+	InitListen(result, port);
 	//Connect(result);
 
 	//freeaddrinfo(result);
@@ -118,7 +118,7 @@ network::network(int protocol, std::string ipAdress, int port)
 	*/
 }
 
-void network::InitListen(addrinfo* result)
+void network::InitListen(addrinfo* result, int port)
 {
 
 	//Create a SOCKET for connecting to server
@@ -133,22 +133,25 @@ void network::InitListen(addrinfo* result)
 
 	printf("Socket created.\n");
 
-	//Setup the listening socket
-	int iResult = bind(listenSocket, result->ai_addr, (int)result->ai_addrlen);
-	if (iResult == SOCKET_ERROR) {
-		printf("bind failed with error: %d\n", WSAGetLastError());
-		freeaddrinfo(result);
-		closesocket(listenSocket);
-		WSACleanup();
-	}
-
-
-	puts("Binded\n");
+	int iResult;
 
 	if (result->ai_protocol == IPPROTO_TCP)
 	{
-		freeaddrinfo(result);
-		//intListen to incoming connections
+
+
+		//Setup the listening socket
+		iResult = bind(listenSocket, result->ai_addr, (int)result->ai_addrlen);
+		if (iResult == SOCKET_ERROR) {
+			printf("bind failed with error: %d\n", WSAGetLastError());
+			freeaddrinfo(result);
+			closesocket(listenSocket);
+			WSACleanup();
+		}
+
+
+		puts("Binded\n");
+
+
 		iResult = listen(listenSocket, SOMAXCONN);
 		if (iResult == SOCKET_ERROR) {
 			printf("listen failed with error: %d\n", WSAGetLastError());
@@ -157,20 +160,35 @@ void network::InitListen(addrinfo* result)
 		}
 
 
+	} else if (result->ai_protocol == IPPROTO_UDP)
+	{
+		sockaddr_in RecvAddr;
+		RecvAddr.sin_family = AF_INET;
+		RecvAddr.sin_port = htons(port);
+		RecvAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+
+		//Setup the listening socket
+		iResult = bind(listenSocket, reinterpret_cast<SOCKADDR*>(&RecvAddr), sizeof(RecvAddr));
+		if (iResult == SOCKET_ERROR) {
+			printf("bind failed with error: %d\n", WSAGetLastError());
+			freeaddrinfo(result);
+			closesocket(listenSocket);
+			WSACleanup();
+		}
+
+
+		puts("Binded\n");
 	}
+	
 
-
-	//TODO
-	//freeaddrinfo(result);
-
-
-	std::thread listenThread(&network::ListenUpdate, this, listenSocket);
+	std::thread listenThread(&network::ListenUpdate, this, listenSocket, result->ai_protocol);
 	if (listenThread.joinable())
 		listenThread.join();
 
 	closesocket(listenSocket);
 
-		
+	freeaddrinfo(result);
+
 }
 
 	
@@ -180,66 +198,50 @@ void network::InitListen(addrinfo* result)
 //Créée Connection pour le client + créée socket de connection au serveur
 void network::Connect(addrinfo* result)
 {
-
-	// Create a SOCKET for connecting to server
-	SOCKET connectSocket = socket(result->ai_family, result->ai_socktype,
-		result->ai_protocol);
-	if (connectSocket == INVALID_SOCKET) {
-		printf("socket failed with error: %ld\n", WSAGetLastError());
-		WSACleanup();
-		//return 1;
-	}
-
-	// Connect to server.
-	int iResult = connect(connectSocket, result->ai_addr, (int)result->ai_addrlen);
-	if (iResult == SOCKET_ERROR) {
-		closesocket(connectSocket);
-		connectSocket = INVALID_SOCKET;
-	}
-
-	if (connectSocket == INVALID_SOCKET) {
-		printf("Unable to connect to server!\n");
-		WSACleanup();
-		//return 1;
-	}
-
-	puts("Connected to server.\n");
-
-	if (result->ai_protocol == IPPROTO_UDP)
-		UDPConnection connection = UDPConnection(listenSocket, connectSocket);
-	else if (result->ai_protocol == IPPROTO_TCP)
-		TCPConnection connection = TCPConnection(listenSocket, connectSocket);
-
-
-
-	freeaddrinfo(result);
+	
 }
 
-void network::ListenUpdate(SOCKET socketToListen)
+void network::ListenUpdate(SOCKET socketToListen, int protocol)
 {
-	FD_ZERO(&socketList);
 
-	while(true)
+
+	if (protocol == IPPROTO_TCP)
 	{
+		FD_ZERO(&socketList);
 
-		// Accept a client socket
-		SOCKET clientSocketTCP = accept(socketToListen, NULL, NULL);
-		if (clientSocketTCP == INVALID_SOCKET) {
-			printf("accept failed with error: %d\n", WSAGetLastError());
-			closesocket(socketToListen);
-			WSACleanup();
-		}
-		else
+		while (true)
 		{
-			FD_SET(clientSocketTCP, &socketList);
-			//Create a connection for the client socket
-			std::cout << "Create a new client connection with socket " << std::to_string(clientSocketTCP).c_str() << "\n";
-			TCPConnection connection = TCPConnection(socketToListen, clientSocketTCP);
-			std::thread listenThread(&network::ListenClient, this, connection);
-			listenThread.detach();
-		}
+			// Accept a client socket
+			SOCKET clientSocketTCP = accept(socketToListen, NULL, NULL);
+			if (clientSocketTCP == INVALID_SOCKET) {
+				printf("accept failed with error: %d\n", WSAGetLastError());
+				closesocket(socketToListen);
+				WSACleanup();
+			}
+			else
+			{
+				FD_SET(clientSocketTCP, &socketList);
+				//Create a connection for the client socket
+				std::cout << "Create a new client connection with socket " << std::to_string(clientSocketTCP).c_str() << "\n";
+				TCPConnection connection = TCPConnection(socketToListen, clientSocketTCP);
+				std::thread listenThread(&network::ListenClient, this, connection);
+				listenThread.detach();
+			}
 
+		}
+	} else if (protocol == IPPROTO_UDP)
+	{
+		UDPConnection connection = UDPConnection(socketToListen);
+		while (true)
+		{
+			std::cout << "bonjour je recois\n";
+			connection.Receive();
+			std::cout << "bonjour je recois plus\n";
+		}
+		
+		
 	}
+	
 
 }
 

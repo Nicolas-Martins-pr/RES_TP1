@@ -10,10 +10,11 @@
 
 class UDPConnection : public Connection {
 public:
-    UDPConnection(SOCKET listenSocket, SOCKET connectSocket);
+    UDPConnection(SOCKET listenSocket, sockaddr ipAddr);
     void Receive();
-    void Send(char* message);
+    void Send(char* message, int port, char* adresse);
 private:
+    sockaddr targetIP;
 };
 
 
