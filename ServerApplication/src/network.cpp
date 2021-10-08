@@ -29,7 +29,6 @@ network::network(int protocol, std::string ipAdress, int port) {
 
     printf("Initialised.\n");
 
-
     ZeroMemory(&hints, sizeof(hints));
     hints.ai_family = AF_INET;
     hints.ai_flags = AI_PASSIVE;
@@ -43,7 +42,6 @@ network::network(int protocol, std::string ipAdress, int port) {
     }
 
     const char *ipAdressAsPCSTR = ipAdress.c_str();
-
     std::string portAsString = std::to_string(port);
     char const *portAsPCSTR = portAsString.c_str();
 
@@ -55,9 +53,7 @@ network::network(int protocol, std::string ipAdress, int port) {
         //return 1;
     }
 
-
     InitListen(result);
-
 }
 
 void network::InitListen(addrinfo *result) {
@@ -70,7 +66,6 @@ void network::InitListen(addrinfo *result) {
         WSACleanup();
     }
 
-
     printf("Socket created.\n");
 
     //Setup the listening socket
@@ -81,7 +76,6 @@ void network::InitListen(addrinfo *result) {
         closesocket(listenSocket);
         WSACleanup();
     }
-
 
     puts("Binded\n");
 
@@ -94,24 +88,16 @@ void network::InitListen(addrinfo *result) {
             closesocket(listenSocket);
             WSACleanup();
         }
-
-
     }
 
-
     //TODO
-    //freeaddrinfo(result);
-
 
     std::thread listenThread(&network::ListenUpdate, this, listenSocket);
     if (listenThread.joinable())
         listenThread.join();
 
     closesocket(listenSocket);
-
-
 }
-
 
 //Cr��e Connection pour le client + cr��e socket de connection au serveur
 void network::Connect(addrinfo *result) {
@@ -144,14 +130,12 @@ void network::Connect(addrinfo *result) {
         UDPConnection connection = UDPConnection(listenSocket, connectSocket);
     else if (result->ai_protocol == IPPROTO_TCP)
         TCPConnection connection = TCPConnection(listenSocket, connectSocket);
-
-
     freeaddrinfo(result);
 }
 
 void network::ListenUpdate(SOCKET socketToListen) {
-    FD_ZERO(&socketList);
 
+    FD_ZERO(&socketList);
     while (true) {
 
         // Accept a client socket
@@ -169,11 +153,8 @@ void network::ListenUpdate(SOCKET socketToListen) {
             std::thread listenThread(&network::ListenClient, this, connection);
             listenThread.detach();
         }
-
     }
-
 }
-
 
 void network::ListenClient(TCPConnection clientConnection) {
 
@@ -190,22 +171,17 @@ void network::ListenClient(TCPConnection clientConnection) {
         for (int i = 0; i < socketList.fd_count; i++) {
             if (strcmp(std::to_string(socketList.fd_array[i]).c_str(),
                        std::to_string(clientConnection.getConnectSocket()).c_str()) != 0) {
-
                 int iResult = send(socketList.fd_array[i], message, (int) strlen(message) + 1, 0);
                 if (iResult == SOCKET_ERROR) {
                     printf("send failed with error: %d\n", WSAGetLastError());
                     closesocket(socketList.fd_array[i]);
                     WSACleanup();
                 }
-
                 printf("Bytes sent: %ld, message sent to client %s : %s\n", iResult,
                        std::to_string(socketList.fd_array[i]).c_str(), message);
-
-
             }
         }
     }
-
 }
 
 
